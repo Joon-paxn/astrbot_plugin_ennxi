@@ -26,3 +26,9 @@ class MyPlugin(Star):
         """获取系统信息指令"""
         info_content = "内核：AstrBot\nPython版本: 3.10\n插件版本: v 1.0\n已载插件：49"
         yield event.plain_result(info_content)
+
+    @filter.command("菜单")
+    async def menu(self, event: AstrMessageEvent):
+        """这是一个菜单指令"""
+        menu_content = "1. 狼人杀\n2. 聊天\n3. 海龟汤\n4. 每日老婆\n5. 代码图片生成\n6. 表情包生成\n7. Minecraft Skin 查询\n8. 左轮手枪对决"
+        yield event.plain_result(menu_content)
