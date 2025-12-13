@@ -2,7 +2,7 @@ from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
 
-@register("helloworld", "YourName", "一个简单的 Hello World 插件", "1.0.0")
+@register("ennxi_plugin", "Ennxi", "ennxi", "1.0.0")
 class MyPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
@@ -20,5 +20,9 @@ class MyPlugin(Star):
         logger.info(message_chain)
         yield event.plain_result(f"Hello, {user_name}, 你发了 {message_str}!") # 发送一条纯文本消息
 
-    async def terminate(self):
-        """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""
+    # 注册指令的装饰器。指令名为 info。注册成功后，发送 `/info` 就会触发这个指令
+    @filter.command("info")
+    async def info(self, event: AstrMessageEvent):
+        """获取系统信息指令"""
+        info_content = "内核：AstrBot\nPython版本: 3.10\n插件版本: v 1.0\n已载插件：49"
+        yield event.plain_result(info_content)
