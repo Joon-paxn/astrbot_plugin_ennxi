@@ -1,8 +1,9 @@
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
+import sys
 
-@register("ennxi_plugin", "Ennxi", "ennxi", "1.0.0")
+@register("ennxi_plugin", "Ennxi", "ennxi", "1.2.0")
 class MyPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
@@ -24,7 +25,8 @@ class MyPlugin(Star):
     @filter.command("info")
     async def info(self, event: AstrMessageEvent):
         """获取系统信息指令"""
-        info_content = "内核：AstrBot\nPython版本: 3.10\n插件版本: v 1.0\n已载插件：49"
+        python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+        info_content = f"内核：AstrBot\nPython版本: {python_version}\n插件版本: v 1.0\n已载插件：49"
         yield event.plain_result(info_content)
 
     # 注册指令的装饰器。指令名为 菜单。注册成功后，发送 `/菜单` 就会触发这个指令    
