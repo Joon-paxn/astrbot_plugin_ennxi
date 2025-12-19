@@ -134,8 +134,9 @@ class MyPlugin(Star):
             logger.error(f"未知错误: {e}")
             yield event.plain_result("发生未知错误，请稍后重试")
     
+    # 注册指令的装饰器。指令名为 jh s。注册成功后，发送 `/jh s` 就会触发这个指令
     @filter.command("jh s")
-    async def menu7(self, event: AstrMessageEvent):
-        """这是一个调用冰钟可url的指令"""
-        menu_content = "https://johehall.cn/console"
-        yield event.plain_result(menu_content)
+    async def jh_s(self, event: AstrMessageEvent):
+        """获取johehall.cn控制台地址"""
+        # 返回指定的URL地址
+        yield event.plain_result("https://johehall.cn/console")
