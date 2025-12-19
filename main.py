@@ -118,7 +118,7 @@ class MyPlugin(Star):
             datetime = data.get("datetime", "未知")
             
             # 格式化响应内容
-            result = f"总访问人数：{total_visits}\n今日访问人数：{today_visits}\n更新日期：{datetime}"
+            result = f"总访问人数：{total_visits}\n今日访问人数：{today_visits}\n更新日期：{datetime}\n官網Url：https://ennxi.xyz"
             
             yield event.plain_result(result)
         except requests.exceptions.RequestException as e:
