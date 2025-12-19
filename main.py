@@ -33,7 +33,7 @@ class MyPlugin(Star):
     @filter.command("菜单")
     async def menu(self, event: AstrMessageEvent):
         """这是一个菜单指令"""
-        menu_content = "1. 狼人杀\n2. 聊天\n3. 海龟汤\n4. 每日老婆\n5. 代码图片生成\n6. 表情包生成\n7. Minecraft Skin 查询\n8. 左轮手枪对决\n可以使用/菜单 答应数字来查询功能"
+        menu_content = "1. 狼人杀\n2. 聊天\n3. 海龟汤\n4. 每日老婆\n5. 代码图片生成\n6. 表情包生成\n7. Minecraft Skin 查询\n8. 左轮手枪对决\n9.今日运势\n可以使用/菜单 答应数字来查询功能"
         yield event.plain_result(menu_content)
         #这个是菜单的子命令1
     @filter.command("菜单 1")
@@ -90,3 +90,11 @@ class MyPlugin(Star):
         """这是一个菜单8指令"""
         menu_content = "左轮手枪对决功能可以和其他玩家进行左轮手枪对决"
         yield event.plain_result(menu_content)
+        
+        #这个是菜单的子命令9
+    @filter.command("菜单 9")
+    async def menu9(self, event: AstrMessageEvent):
+        """这是一个菜单9指令"""
+        menu_content = "今日运势功能可以查询今日的运势 /今日运势"
+        yield event.plain_result(menu_content)
+    
