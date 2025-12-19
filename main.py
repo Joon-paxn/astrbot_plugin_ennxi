@@ -134,7 +134,7 @@ class MyPlugin(Star):
             logger.error(f"未知错误: {e}")
             yield event.plain_result("发生未知错误，请稍后重试")
     
-    @filter.command(".jh s")
+    @filter.command("jh s")
     async def menu7(self, event: AstrMessageEvent):
         """这是一个调用冰钟可url的指令"""
         menu_content = "https://johehall.cn/console"
