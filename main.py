@@ -2,6 +2,8 @@ from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
 import sys
+import requests
+import json
 
 @register("ennxi_plugin", "Ennxi", "ennxi", "1.2.0")
 class MyPlugin(Star):
@@ -97,4 +99,38 @@ class MyPlugin(Star):
         """这是一个菜单9指令"""
         menu_content = "今日运势功能可以查询今日的运势 /今日运势"
         yield event.plain_result(menu_content)
+    
+    # 注册指令的装饰器。指令名为 enxi rs。注册成功后，发送 `/enxi rs` 就会触发这个指令
+    @filter.command("enxi rs")
+    async def enxi_rs(self, event: AstrMessageEvent):
+        """获取ennxi.xyz网站统计数据"""
+        try:
+            # 发送HTTP GET请求到API地址
+            response = requests.get("https://ennxi.xyz/api/stats.php")
+            response.raise_for_status()  # 检查请求是否成功
+            
+            # 解析JSON响应
+            data = response.json()
+            
+            # 提取所需数据
+            total_visits = data.get("total_visits", 0)
+            today_visits = data.get("today_visits", 0)
+            datetime = data.get("datetime", "未知")
+            
+            # 格式化响应内容
+            result = f"总访问人数：{total_visits}\n今日访问人数：{today_visits}\n更新日期：{datetime}"
+            
+            yield event.plain_result(result)
+        except requests.exceptions.RequestException as e:
+            # 处理网络请求错误
+            logger.error(f"API请求失败: {e}")
+            yield event.plain_result("获取数据失败，请稍后重试")
+        except json.JSONDecodeError as e:
+            # 处理JSON解析错误
+            logger.error(f"JSON解析失败: {e}")
+            yield event.plain_result("数据格式错误，请稍后重试")
+        except Exception as e:
+            # 处理其他未知错误
+            logger.error(f"未知错误: {e}")
+            yield event.plain_result("发生未知错误，请稍后重试")
     
