@@ -4,6 +4,7 @@ from astrbot.api import logger
 import sys
 import requests
 import json
+import time
 
 @register("ennxi_plugin", "Ennxi", "ennxi", "1.2.0")
 class MyPlugin(Star):
@@ -140,3 +141,23 @@ class MyPlugin(Star):
         """获取johehall.cn控制台地址"""
         # 返回指定的URL地址
         yield event.plain_result("https://johehall.cn/console")
+    
+    # 注册指令的装饰器。指令名为 testpingtext。注册成功后，发送 `/testpingtext` 就会触发这个指令
+    @filter.command("testpingtext")
+    async def testpingtext(self, event: AstrMessageEvent):
+        """测试机器人回复速度"""
+        # 记录命令接收时的起始时间
+        start_time = time.time()
+        
+        # 执行必要的处理（在此场景中主要是计时）
+        
+        # 记录命令处理完成时的结束时间
+        end_time = time.time()
+        
+        # 计算响应时间，保留1位小数
+        response_time = round(end_time - start_time, 1)
+        
+        # 按照指定格式返回结果
+        result = f"({response_time} @)"
+        
+        yield event.plain_result(result)
