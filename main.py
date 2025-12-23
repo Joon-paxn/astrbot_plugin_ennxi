@@ -161,3 +161,8 @@ class MyPlugin(Star):
         result = f"({response_time} @)"
         
         yield event.plain_result(result)
+        
+        @filter.command("test")
+        async def test(self, event: AstrMessageEvent):
+            """测试指令"""
+            yield event.plain_result("恭喜🎉测试成功!\n服务器运行正常！")
