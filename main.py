@@ -6,7 +6,7 @@ import requests
 import json
 import time
 
-@register("ennxi_plugin", "Ennxi", "ennxi", "1.2.1")
+@register("ennxi_plugin", "Ennxi", "ennxi", "1.2.2")
 class MyPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
