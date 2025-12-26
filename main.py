@@ -107,7 +107,7 @@ class MyPlugin(Star):
         """获取ennxi.xyz网站统计数据"""
         try:
             # 发送HTTP GET请求到API地址
-            response = requests.get("https://ennxi.xyz/api/stats.php")
+            response = requests.get("https://ennxi.xyz/api/stats.php?format=json&api_key=2e3f42e96211ad5de7f44697d706d38486e151ff20d29f8ffc3e7ecd206d210d")
             response.raise_for_status()  # 检查请求是否成功
             
             # 解析JSON响应
