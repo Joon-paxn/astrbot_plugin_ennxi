@@ -162,10 +162,5 @@ class MyPlugin(Star):
         
         yield event.plain_result(result)
     
-    @filter.message()
-    async def handle_message(self, event: AstrMessageEvent):
-        """处理普通消息"""
-        message_str = event.message_str.strip()
-        if message_str == "test":
-            yield event.plain_result("恭喜🎉测试成功\n服务器运行正常！")
+    
         
