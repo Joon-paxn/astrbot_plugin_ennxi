@@ -1,6 +1,8 @@
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
+import astrbot.api.message_components as Comp
+from astrbot.core.platform.sources.aiocqhttp.aiocqhttp_message_event import AiocqhttpMessageEvent
 import sys
 import requests
 import json
@@ -161,6 +163,44 @@ class MyPlugin(Star):
         result = f"({response_time} @)"
         
         yield event.plain_result(result)
+    
+    # 需要@的QQ号列表，用户可以在此处填写需要@的成员QQ号
+    RJH_QQ_LIST = [
+        "2178693643",  # 示例QQ号1
+        "3078797195"
+    ]
+    
+    # 注册指令的装饰器。支持两种指令名：`rjh` 和 `@rjh`
+    @filter.command("rjh")
+    @filter.command("@rjh")
+    async def at_rjh(self, event: AstrMessageEvent):
+        """@群里对应的成员"""
+        # 构建消息组件列表
+        message_components = []
+        
+        # 遍历QQ列表，创建@组件
+        for qq in self.RJH_QQ_LIST:
+            # 添加@组件
+            message_components.append(Comp.At(qq=qq))
+            # 添加空格分隔符
+            message_components.append(Comp.Plain(text=" "))
+        
+        # 发送消息链
+        yield event.chain_result(message_components)
+    
+    # 注册指令的装饰器。指令名为 atjh。注册成功后，发送 `/atjh` 就会触发这个指令
+    @filter.command("atjh")
+    async def at_jh_r(self, event: AstrMessageEvent):
+        """@群里名字带有Jh和R的用户"""
+        # 简化实现，直接返回测试消息
+        yield event.plain_result("atjh指令已触发，开始执行@操作...")
+        
+        try:
+            # 直接使用event.plain_result发送@消息，使用简单格式
+            return "@Jh @R 测试消息"  # 简化测试
+        except Exception as e:
+            logger.error(f"@Jh和R用户失败: {e}")
+            yield event.plain_result(f"@成员失败: {str(e)}")
     
     
         
