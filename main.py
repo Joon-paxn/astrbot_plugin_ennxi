@@ -192,15 +192,53 @@ class MyPlugin(Star):
     @filter.command("atjh")
     async def at_jh_r(self, event: AstrMessageEvent):
         """@群里名字带有Jh和R的用户"""
-        # 简化实现，直接返回测试消息
-        yield event.plain_result("atjh指令已触发，开始执行@操作...")
+        # 检查是否为Aiocqhttp消息事件
+        if not isinstance(event, AiocqhttpMessageEvent):
+            yield event.plain_result("此功能仅支持QQ群聊")
+            return
         
         try:
-            # 直接使用event.plain_result发送@消息，使用简单格式
-            return "@Jh @R 测试消息"  # 简化测试
+            # 获取群ID
+            group_id = event.get_group_id()
+            if not group_id:
+                yield event.plain_result("无法获取群ID")
+                return
+            
+            # 获取群成员列表
+            client = event.bot
+            params = {"group_id": group_id}
+            members_info = await client.api.call_action('get_group_member_list', **params)
+            
+            if not members_info:
+                yield event.plain_result("无法获取群成员列表")
+                return
+            
+            # 筛选名字带有Jh或R的成员
+            target_members = []
+            for member in members_info:
+                # 获取成员的昵称或群名片
+                name = member.get("card") or member.get("nickname") or ""
+                user_id = str(member.get("user_id"))
+                
+                # 检查名字是否带有Jh或R（不区分大小写）
+                if "jh" in name.lower() or "r" in name.lower():
+                    target_members.append({"user_id": user_id, "name": name})
+            
+            if not target_members:
+                yield event.plain_result("群里没有名字带有Jh或R的成员")
+                return
+            
+            # 构建@消息
+            message_components = []
+            for member in target_members:
+                message_components.append(Comp.At(qq=member["user_id"]))
+                message_components.append(Comp.Plain(text=" "))
+            
+            # 发送消息链
+            yield event.chain_result(message_components)
         except Exception as e:
             logger.error(f"@Jh和R用户失败: {e}")
-            yield event.plain_result(f"@成员失败: {str(e)}")
+            yield event.plain_result("@成员失败，请稍后重试")
     
     
         
