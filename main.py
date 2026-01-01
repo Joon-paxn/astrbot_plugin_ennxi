@@ -1,8 +1,7 @@
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
 from astrbot.api.star import Context, Star, register
 from astrbot.api import logger
-import astrbot.api.message_components as Comp
-from astrbot.core.platform.sources.aiocqhttp.aiocqhttp_message_event import AiocqhttpMessageEvent
+from astrbot.api.message_components import *
 import sys
 import requests
 import json
@@ -170,74 +169,24 @@ class MyPlugin(Star):
         "3078797195"
     ]
     
-    # 注册指令的装饰器。支持两种指令名：`rjh` 和 `@rjh`
+    # 注册指令的装饰器。指令名为 @rjh。注册成功后，发送 `/@rjh` 就会触发这个指令
     @filter.command("rjh")
-    @filter.command("@rjh")
     async def at_rjh(self, event: AstrMessageEvent):
         """@群里对应的成员"""
-        # 构建消息组件列表
-        message_components = []
-        
-        # 遍历QQ列表，创建@组件
-        for qq in self.RJH_QQ_LIST:
-            # 添加@组件
-            message_components.append(Comp.At(qq=qq))
-            # 添加空格分隔符
-            message_components.append(Comp.Plain(text=" "))
-        
-        # 发送消息链
-        yield event.chain_result(message_components)
-    
-    # 注册指令的装饰器。指令名为 atjh。注册成功后，发送 `/atjh` 就会触发这个指令
-    @filter.command("atjh")
-    async def at_jh_r(self, event: AstrMessageEvent):
-        """@群里名字带有Jh和R的用户"""
-        # 检查是否为Aiocqhttp消息事件
-        if not isinstance(event, AiocqhttpMessageEvent):
-            yield event.plain_result("此功能仅支持QQ群聊")
-            return
-        
         try:
-            # 获取群ID
-            group_id = event.get_group_id()
-            if not group_id:
-                yield event.plain_result("无法获取群ID")
-                return
+            # 构建消息链
+            message_chain = []
+            for qq in self.RJH_QQ_LIST:
+                # 使用At组件@特定用户
+                message_chain.append(At(qq))
+                # 添加一个空格作为分隔
+                message_chain.append(Plain(" "))
             
-            # 获取群成员列表
-            client = event.bot
-            params = {"group_id": group_id}
-            members_info = await client.api.call_action('get_group_member_list', **params)
-            
-            if not members_info:
-                yield event.plain_result("无法获取群成员列表")
-                return
-            
-            # 筛选名字带有Jh或R的成员
-            target_members = []
-            for member in members_info:
-                # 获取成员的昵称或群名片
-                name = member.get("card") or member.get("nickname") or ""
-                user_id = str(member.get("user_id"))
-                
-                # 检查名字是否带有Jh或R（不区分大小写）
-                if "jh" in name.lower() or "r" in name.lower():
-                    target_members.append({"user_id": user_id, "name": name})
-            
-            if not target_members:
-                yield event.plain_result("群里没有名字带有Jh或R的成员")
-                return
-            
-            # 构建@消息
-            message_components = []
-            for member in target_members:
-                message_components.append(Comp.At(qq=member["user_id"]))
-                message_components.append(Comp.Plain(text=" "))
-            
-            # 发送消息链
-            yield event.chain_result(message_components)
+            # 发送包含所有@的消息
+            yield event.result(message_chain)
         except Exception as e:
-            logger.error(f"@Jh和R用户失败: {e}")
+            # 处理未知错误
+            logger.error(f"@rjh指令执行失败: {e}")
             yield event.plain_result("@成员失败，请稍后重试")
     
     
