@@ -157,7 +157,7 @@ class MyPlugin(Star):
         yield event.plain_result(result)
     
     # 注册指令的装饰器。指令名为 enxi rs。注册成功后，发送 `/enxi rs` 就会触发这个指令
-    @filter.command("testenxi rs")
+    @filter.command("rs enxi test")
     async def enxi_rs(self, event: AstrMessageEvent):
         """获取ennxi.xyz网站统计数据"""
         try:
