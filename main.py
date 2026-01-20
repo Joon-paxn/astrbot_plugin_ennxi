@@ -18,12 +18,12 @@ class MyPlugin(Star):
     # 注册指令的装饰器。指令名为 helloworld。注册成功后，发送 `/helloworld` 就会触发这个指令，并回复 `你好, {user_name}!`
     @filter.command("helloworld")
     async def helloworld(self, event: AstrMessageEvent):
-        """这是一个 hello world 指令""" # 这是 handler 的描述，将会被解析方便用户了解插件内容。建议填写。
+        """这是一个 hello world 指令"""
         user_name = event.get_sender_name()
-        message_str = event.message_str # 用户发的纯文本消息字符串
-        message_chain = event.get_messages() # 用户所发的消息的消息链 # from astrbot.api.message_components import *
+        message_str = event.message_str
+        message_chain = event.get_messages()
         logger.info(message_chain)
-        yield event.plain_result(f"Hello, {user_name}, 你发了 {message_str}!") # 发送一条纯文本消息
+        yield event.plain_result(f"Hello, {user_name}, 你发了 {message_str}!")
 
     # 注册指令的装饰器。指令名为 info。注册成功后，发送 `/info` 就会触发这个指令
     @filter.command("info")
@@ -39,63 +39,64 @@ class MyPlugin(Star):
         """这是一个菜单指令"""
         menu_content = "1. 狼人杀\n2. 聊天\n3. 海龟汤\n4. 每日老婆\n5. 代码图片生成\n6. 表情包生成\n7. Minecraft Skin 查询\n8. 左轮手枪对决\n9.今日运势\n可以使用/菜单 答应数字来查询功能"
         yield event.plain_result(menu_content)
-        #这个是菜单的子命令1
+
+    # 这个是菜单的子命令1
     @filter.command("菜单 1")
     async def menu1(self, event: AstrMessageEvent):
         """这是一个菜单1指令"""
         menu_content = "狼人杀需要9个玩家然后添加队伍进行游戏"
         yield event.plain_result(menu_content)
         
-        #这个是菜单的子命令2
+    # 这个是菜单的子命令2
     @filter.command("菜单 2")
     async def menu2(self, event: AstrMessageEvent):
         """这是一个菜单2指令"""
         menu_content = "聊天功能可以和其他玩家进行聊天"
         yield event.plain_result(menu_content)
         
-        #这个是菜单的子命令3
+    # 这个是菜单的子命令3
     @filter.command("菜单 3")
     async def menu3(self, event: AstrMessageEvent):
         """这是一个菜单3指令"""
         menu_content = "海龟汤功能可以生成随机的海龟汤然后去解答"
         yield event.plain_result(menu_content)
         
-        #这个是菜单的子命令4
+    # 这个是菜单的子命令4
     @filter.command("菜单 4")
     async def menu4(self, event: AstrMessageEvent):
         """这是一个菜单4指令"""
         menu_content = "每日老婆功能可以每日在你的群里面抽取20位幸运群友作为你的老婆！"
         yield event.plain_result(menu_content)
         
-        #这个是菜单的子命令5
+    # 这个是菜单的子命令5
     @filter.command("菜单 5")
     async def menu5(self, event: AstrMessageEvent):
         """这是一个菜单5指令"""
         menu_content = "代码图片生成功能可以生成包含代码的图片"
         yield event.plain_result(menu_content)
         
-        #这个是菜单的子命令6
+    # 这个是菜单的子命令6
     @filter.command("菜单 6")
     async def menu6(self, event: AstrMessageEvent):
         """这是一个菜单6指令"""
         menu_content = "表情包生成功能可以生成的整蛊或者有意思的表情包"
         yield event.plain_result(menu_content)
         
-        #这个是菜单的子命令7
+    # 这个是菜单的子命令7
     @filter.command("菜单 7")
     async def menu7(self, event: AstrMessageEvent):
         """这是一个菜单7指令"""
         menu_content = "Minecraft Skin 查询功能可以查询玩家的 Minecraft 皮肤"
         yield event.plain_result(menu_content)
         
-        #这个是菜单的子命令8
+    # 这个是菜单的子命令8
     @filter.command("菜单 8")
     async def menu8(self, event: AstrMessageEvent):
         """这是一个菜单8指令"""
         menu_content = "左轮手枪对决功能可以和其他玩家进行左轮手枪对决"
         yield event.plain_result(menu_content)
         
-        #这个是菜单的子命令9
+    # 这个是菜单的子命令9
     @filter.command("菜单 9")
     async def menu9(self, event: AstrMessageEvent):
         """这是一个菜单9指令"""
@@ -155,6 +156,3 @@ class MyPlugin(Star):
         result = f"({response_time} @)"
         
         yield event.plain_result(result)
-
-    
-        
