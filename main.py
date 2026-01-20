@@ -136,13 +136,6 @@ class MyPlugin(Star):
             logger.error(f"未知错误: {e}")
             yield event.plain_result("发生未知错误，请稍后重试")
     
-    # 注册指令的装饰器。指令名为 jh s。注册成功后，发送 `/jh s` 就会触发这个指令
-    @filter.command("jh s")
-    async def jh_s(self, event: AstrMessageEvent):
-        """获取johehall.cn控制台地址"""
-        # 返回指定的URL地址
-        yield event.plain_result("https://johehall.cn/console")
-    
     # 注册指令的装饰器。指令名为 testpingtext。注册成功后，发送 `/testpingtext` 就会触发这个指令
     @filter.command("testpingtext")
     async def testpingtext(self, event: AstrMessageEvent):
@@ -163,31 +156,39 @@ class MyPlugin(Star):
         
         yield event.plain_result(result)
     
-    # 需要@的QQ号列表，用户可以在此处填写需要@的成员QQ号
-    RJH_QQ_LIST = [
-        "2178693643",  # 示例QQ号1
-        "3078797195"
-    ]
-    
-    # 注册指令的装饰器。指令名为 @rjh。注册成功后，发送 `/@rjh` 就会触发这个指令
-    @filter.command("rjh")
-    async def at_rjh(self, event: AstrMessageEvent):
-        """@群里对应的成员"""
+    # 注册指令的装饰器。指令名为 enxi rs。注册成功后，发送 `/enxi rs` 就会触发这个指令
+    @filter.command("testenxi rs")
+    async def enxi_rs(self, event: AstrMessageEvent):
+        """获取ennxi.xyz网站统计数据"""
         try:
-            # 构建消息链
-            message_chain = []
-            for qq in self.RJH_QQ_LIST:
-                # 使用At组件@特定用户
-                message_chain.append(At(qq))
-                # 添加一个空格作为分隔
-                message_chain.append(Plain(" "))
+            # 发送HTTP GET请求到API地址
+            response = requests.get("https://testenxi.ennxi.xyz/api/stats.php?format=json&api_key=2e3f42e96211ad5de7f44697d706d38486e151ff20d29f8ffc3e7ecd206d210d")
+            response.raise_for_status()  # 检查请求是否成功
             
-            # 发送包含所有@的消息
-            yield event.result(message_chain)
+            # 解析JSON响应
+            data = response.json()
+            
+            # 提取所需数据
+            total_visits = data.get("total_visits", 0)
+            today_visits = data.get("today_visits", 0)
+            datetime = data.get("datetime", "未知")
+            
+            # 格式化响应内容
+            result = f"总访问人数：{total_visits}\n今日访问人数：{today_visits}\n更新日期：{datetime}\n官網Url：https://ennxi.xyz"
+            
+            yield event.plain_result(result)
+        except requests.exceptions.RequestException as e:
+            # 处理网络请求错误
+            logger.error(f"API请求失败: {e}")
+            yield event.plain_result("获取数据失败，请稍后重试")
+        except json.JSONDecodeError as e:
+            # 处理JSON解析错误
+            logger.error(f"JSON解析失败: {e}")
+            yield event.plain_result("数据格式错误，请稍后重试")
         except Exception as e:
-            # 处理未知错误
-            logger.error(f"@rjh指令执行失败: {e}")
-            yield event.plain_result("@成员失败，请稍后重试")
+            # 处理其他未知错误
+            logger.error(f"未知错误: {e}")
+            yield event.plain_result("发生未知错误，请稍后重试")
     
     
         
