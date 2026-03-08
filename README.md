@@ -8,4 +8,6 @@ A template plugin for AstrBot plugin feature
 
 # [Bot 网站](https://ennxi.xyz)
 可以使用
-/菜单 "对应数字"使用指令
+@恩熙 /菜单 "对应数字"使用指令
+如:
+@恩熙 /菜单 1
